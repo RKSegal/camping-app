@@ -27,11 +27,8 @@ router.get("/", function(req, res){
 //create and add to db
 router.post("/", middleware.isLoggedIn, function(req, res){
     //get data from form and add to campgrounds array
-    var name = req.body.name;
-    var price = req.body.price;
-    var image = req.body.image;
-    var desc = req.body.description;
-    var author = {
+    const { name, price, image, description } = req.body;
+    const author = {
         id: req.user._id,
         username: req.user.username
     }
@@ -40,11 +37,12 @@ router.post("/", middleware.isLoggedIn, function(req, res){
           req.flash('error', 'Invalid address');
           return res.redirect('back');
         }
-        var lat = data[0].latitude;
-        var lng = data[0].longitude;
-        var location = data[0].formattedAddress;
-        var newCampground = {name: name, price: price, image: image, description: desc, author:author, location: location, lat: lat, lng: lng};
-        newCampground.created_at = new Date();
+        const lat = data[0].latitude;
+        const lng = data[0].longitude;
+        const location = data[0].formattedAddress;
+        const newCampground = { name, price, image, description, author, location, lat, lng };
+        newCampground.createdAt = new Date();
+        newCampground.updatedAt = new Date();
     //create a new campground and save to DB
     Campground.create(newCampground, function(err, newlyCreated){
         if(err){
@@ -91,6 +89,7 @@ router.put("/:id", middleware.checkCampgroundOwnership, function(req, res){
         req.body.campground.lat = data[0].latitude;
         req.body.campground.lng = data[0].longitude;
         req.body.campground.location = data[0].formattedAddress;
+        req.body.campground.updatedAt = new Date();
     //find and update correct campground
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, updatedCampground){
         if(err){
