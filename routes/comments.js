@@ -23,6 +23,8 @@ router.post("/", middleware.isLoggedIn, function(req, res){
             res.redirect("/campgrounds");
         } else {
             //create new comment
+            const newComment = JSON.parse(JSON.stringify(req.body.comment));
+            newComment.created_at = new Date();
             Comment.create(req.body.comment, function(err, comment){
                 if(err){
                     req.flash("error", "Something went wrong.")

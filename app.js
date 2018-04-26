@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const   express         = require("express"),
         app             = express(),
         bodyParser      = require("body-parser"),
@@ -23,7 +25,7 @@ app.use(express.static(__dirname + "/public"))
 app.use(methodOverride("_method"));
 app.use(flash());
 
-app.locals,moment = require("moment");
+app.locals.moment = require("moment");
 
 //Passport Configuration
 app.use(require("express-session")({
