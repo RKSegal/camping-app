@@ -1,5 +1,8 @@
 require("dotenv").config();
 
+const PORT = process.env.PORT || 3000;
+const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017/yelp_camp';
+
 const   express         = require("express"),
         app             = express(),
         bodyParser      = require("body-parser"),
@@ -52,12 +55,12 @@ app.use("/", indexRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 
-mongoose.connect('mongodb://localhost:27017/yelp_camp', (err) => {
+mongoose.connect(MONGODB_URL, (err) => {
     if (err) {
         throw new Error(err);
     }
     console.log('Connect to Mongodb successfully');
-    app.listen(3000, (err) => {
+    app.listen(PORT, (err) => {
         if (err) {
             throw err;
         }
